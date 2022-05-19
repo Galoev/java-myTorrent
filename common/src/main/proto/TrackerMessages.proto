@@ -1,0 +1,95 @@
+syntax = "proto3";
+option java_multiple_files = true;
+
+package ru.itmo.java.message.tracker;
+
+message BaseRequest {
+  oneof request {
+    ListRequest listRequest = 1;
+    UploadRequest uploadRequest = 2;
+    SourcesRequest sourcesRequest = 3;
+    UpdateRequest updateRequest = 4;
+    StatRequest statRequest = 5;
+    GetRequest getRequest = 6;
+  }
+}
+
+message BaseResponse {
+  oneof response {
+    ListResponse listResponse = 1;
+    UploadResponse uploadResponse = 2;
+    SourcesResponse sourcesResponse = 3;
+    UpdateResponse updateResponse = 4;
+    StatResponse statResponse = 5;
+    GetResponse getResponse = 6;
+  }
+}
+
+message ListRequest {
+}
+
+message ListResponse {
+  int64 count = 1;
+  repeated FileInfo files = 2;
+}
+
+message FileInfo {
+  int64 id = 1;
+  string name = 2;
+  int64 size = 3;
+}
+
+message UploadRequest {
+  string name = 1;
+  int64 size = 2;
+}
+
+message UploadResponse {
+  int64 id = 1;
+  string name = 2;
+  int64 size = 3;
+}
+
+message SourcesRequest {
+  int64 id = 1;
+}
+
+message SourcesResponse {
+  int64 size = 1;
+  repeated ClientInfo clients = 2;
+  bool correctRequestId = 3;
+}
+
+message ClientInfo {
+  string ip = 1;
+  int64 port = 2;
+}
+
+message UpdateRequest {
+  int32 clientPort = 1;
+  int64 count = 2;
+  repeated int64 id = 3;
+}
+
+message UpdateResponse {
+  bool status = 1;
+}
+
+message StatRequest {
+  int64 id = 1;
+}
+
+message StatResponse {
+  int64 numParts = 1;
+  repeated int64 completeParts = 2;
+}
+
+message GetRequest {
+  int64 id = 1;
+  int64 partId = 2;
+}
+
+message GetResponse {
+  bytes content = 1;
+  bool correctRequestId = 2;
+}
